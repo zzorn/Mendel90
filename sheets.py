@@ -2,7 +2,7 @@
 
 import os
 import openscad
-import InkCL
+import inkscape
 import shutil
 import sys
 from dxf import *
@@ -59,7 +59,7 @@ def sheets(machine):
                         #
                         # Make PDF for printing
                         #
-                        InkCL.run("-f", base_name + ".svg", "-A", base_name + ".pdf")
+                        inkscape.run("-f", base_name + ".svg", "-A", base_name + ".pdf")
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
