@@ -10,6 +10,7 @@
 
 //                       corner  body    boss    boss          shaft
 //         side, length, radius, radius, radius, depth, shaft, length, holes
+NEMA23  = [56.5, 76.5,   60/2, 32, 38.10/2, 1.6,  6.36,  18.8,   47.14 ];
 NEMA17  = [42.3, 47.5,   53.6/2, 25,     11,     2,     5,     24,     31 ];
 NEMA17S = [42.3, 34,     53.6/2, 25,     11,     2,     5,     24,     31 ];
 NEMA14  = [35.2, 36,     46.4/2, 21,     11,     2,     5,     21,     26 ];
