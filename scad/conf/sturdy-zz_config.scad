@@ -13,26 +13,26 @@ Z_bearings = LM10UU;
 Y_bearings = LM10UU;
 X_bearings = LM10UU;
 
-X_motor = NEMA23;
-Y_motor = NEMA23;
-Z_motor = NEMA23;
+X_motor = NEMA17;
+Y_motor = NEMA17;
+Z_motor = NEMA17;
 
-X_travel = 214;
-Y_travel = 218;
-Z_travel = 150;
+X_travel = 287;
+Y_travel = 204;
+Z_travel = 200;
 
-bed_depth = 214;
-bed_width = 214;
+bed_depth = 200;
+bed_width = 287;
 bed_pillars = M3x20_pillar;
 bed_glass = glass2;
 bed_thickness = 1.6 + sheet_thickness(bed_glass);    // PCB heater plus glass sheet
 bed_holes = 209;
 
 base = MDF12;
-base_corners = 0;
+base_corners = 50;
 
 frame = MDF12;
-frame_corners = 0;
+frame_corners = 25;
 frame_nuts = false;
 
 case_fan = fan80x38;
