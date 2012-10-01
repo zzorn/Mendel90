@@ -13,11 +13,11 @@ module bed_assembly() {
 
     assembly("bed_assembly");
 
-    for(x = [-bed_holes / 2, bed_holes /2]) {
-        translate([x, bed_holes / 2, 0])
+    for(x = [-bed_holes_x / 2, bed_holes_x /2]) {
+        translate([x, bed_holes_y / 2, 0])
             washer(M3_washer);
 
-        for(y = [-bed_holes / 2, bed_holes /2])
+        for(y = [-bed_holes_y / 2, bed_holes_y /2])
             translate([x, y, washer_thickness(M3_washer)]) {
                 hex_pillar(bed_pillars);
 
