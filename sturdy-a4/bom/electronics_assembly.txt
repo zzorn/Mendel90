@@ -1,0 +1,11 @@
+electronics_assembly:
+Vitamins:
+  8 M3 cap screw x 16mm
+  1 PSU e.g. KY240W12L
+  1 Electronics e.g. Sanguinolou
+  8 Washer M3 x 7mm x 0.5mm
+  8 Star washer M3 x 7mm x 0.5mm
+
+Printed:
+  4 pcb_spacer.stl
+
