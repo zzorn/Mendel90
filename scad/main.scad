@@ -22,7 +22,7 @@ use <fan-guard.scad>
 use <wade.scad>
 use <cable_clip.scad>
 use <pcb_spacer.scad>
-use <ATX_psu_brackets.scad>
+use <ATX_PSU_brackets.scad>
 use <spool_holder.scad>
 use <tube_cap.scad>
 use <d-motor_bracket.scad>
