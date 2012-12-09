@@ -92,7 +92,10 @@ thermistor_wires_hole_radius = wire_hole_radius(thermistor_wires);
 
 cnc_sheets = false;                 // If sheets are cut by CNC we can use slots, etc instead of just round holes
 base_nuts = false;                  // Need something under the base if using nuts
-pulley_type = T5x8_plastic_pulley;
+
+//pulley_type = T5x8_plastic_pulley;
+pulley_type = T5x10_metal_pulley;
+
 include <machine.scad>              // this file is generated from the command line parameter to include one of the machine configs
 
 screw_clearance_radius = screw_clearance_radius(cap_screw);

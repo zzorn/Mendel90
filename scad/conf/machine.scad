@@ -1,1 +1,1 @@
-include <sturdy_config.scad>
+include <sturdy-a4_config.scad>
