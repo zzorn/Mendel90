@@ -7,9 +7,15 @@
 //
 // A strip of polypropylene used with ribbon cable to make a cable flexible in one direction only.
 //
-module cable_strip(width, depth, travel, x, extra = 15) {
+cable_strip_thickness = 0.5;
 
-    thickness = 0.5;
+function cable_strip_length(depth, travel, extra = 15) = ceil(travel / 2 + 2 * extra + PI * depth);
+
+module cable_strip(ways, depth, travel, x, extra = 15) {
+
+    width = ribbon_clamp_slot(ways);
+
+    thickness = cable_strip_thickness;
 
     radius = depth / 2;
 
@@ -19,7 +25,7 @@ module cable_strip(width, depth, travel, x, extra = 15) {
     length = max(top, bottom);
 
     total = ceil(top + bottom + PI * depth);
-    w = floor(width - 1);
+    w = floor(width - 2);
 
     vitamin(str("PP", thickness * 10, w, total,": Polypropylene strip ", total, "mm x ", w, "mm x ", thickness, "mm"));
 
@@ -55,8 +61,12 @@ module ellipse(xr, yr, center = true)
         circle(r = xr, center = center);
 }
 
-module elliptical_cable_strip(width, p1, p2, pmax, extra = 15) {
-    thickness = 0.5;
+function elliptical_cable_strip_length(p1, pmax, extra = 15) =  ceil(PI * pow((pow(abs((pmax - p1)[0] / 2),1.5) + pow(75,1.5))/2, 1/1.5)) + 2 * extra;
+
+module elliptical_cable_strip(ways, p1, p2, pmax, extra = 15) {
+    width = ribbon_clamp_slot(ways);
+
+    thickness = cable_strip_thickness;
     w = floor(width - 1);
 
     max_delta = pmax - p1;

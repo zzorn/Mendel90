@@ -7,7 +7,7 @@
 //
 // Configuration file
 //
-echo("Sturdy zzorn:");
+echo("Sturdy A4:");
 
 Z_bearings = LM10UU;
 Y_bearings = LM10UU;
@@ -17,17 +17,19 @@ X_motor = NEMA17;
 Y_motor = NEMA17;
 Z_motor = NEMA17;
 
+hot_end = JHeadMk4;
+
 X_travel = 287;
 Y_travel = 204;
 Z_travel = 250;
 
-bed_depth = 200;
 bed_width = 287;
+bed_depth = 200;
 bed_pillars = M3x20_pillar;
 bed_glass = glass2;
 bed_thickness = 1.6 + sheet_thickness(bed_glass);    // PCB heater plus glass sheet
-bed_holes_x = 277; // Distance between bed hole centers along x and y axis.
-bed_holes_y = 190;
+bed_holes_x = bed_width - 10; // Distance between bed hole centers along x and y axis.
+bed_holes_y = bed_depth - 10;
 
 base = MDF12;
 base_corners = 50;
@@ -39,14 +41,16 @@ frame_nuts = false;
 case_fan = fan80x38;
 psu = KY240W;
 
+controller = Sanguinololu;
+
+spool = spool_300x85;
+bottom_limit_switch = false;
+top_limit_switch = true;
+
 single_piece_frame = true;
 stays_from_window = false;
 
 Y_carriage = DiBond;
-
-extruder_width = 30;        // actually 28 but offset
-nozzle_x_offset = 16;       // offset from centre of the extruder
-nozzle_length = 50;         // from base of extruder to nozzle tip
 
 X_belt = T5x6;
 Y_belt = T5x6;

@@ -10,7 +10,6 @@
 
 //                       corner  body    boss    boss          shaft
 //         side, length, radius, radius, radius, depth, shaft, length, holes
-NEMA23  = [56.5, 76.5,   60/2, 32, 38.10/2, 1.6,  6.36,  18.8,   47.14 ];
 NEMA17  = [42.3, 47.5,   53.6/2, 25,     11,     2,     5,     24,     31 ];
 NEMA17S = [42.3, 34,     53.6/2, 25,     11,     2,     5,     24,     31 ];
 NEMA14  = [35.2, 36,     46.4/2, 21,     11,     2,     5,     21,     26 ];
@@ -65,9 +64,9 @@ module NEMA(motor) {
     }
 }
 
-module NEMA_screws(motor, n = 4) {
+module NEMA_screws(motor, n = 4, screw_length = 8, screw_type = M3_pan_screw) {
     for(a = [0: 90 : 90 * (n - 1)])
         rotate([0, 0, a])
             translate([motor[8]/2, motor[8]/2, 0])
-                screw_and_washer(M3_pan_screw, 8, true);
+                screw_and_washer(screw_type, screw_length, true);
 }

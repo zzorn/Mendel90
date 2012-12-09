@@ -14,7 +14,7 @@ use <z-coupling.scad>
 corner_rad = 5;
 length = ceil(NEMA_width(Z_motor));
 thickness = 4;
-back_thickness = 5;
+back_thickness = part_base_thickness + (frame_nut_traps ? nut_trap_depth(frame_nut) : 0);
 back_height = 24;
 big_hole = NEMA_big_hole(Z_motor);
 clamp_height = washer_diameter(washer) + 3;
@@ -24,8 +24,6 @@ clamp_length = Z_bar_dia / 2 + bar_clamp_tab - 2;
 gap = 1.5;
 
 clamp_width = Z_bar_dia + 2 * clamp_thickness;
-slot_inset = max((washer_diameter(screw_washer(frame_screw)) + 2),
-                 length / 2 - NEMA_holes(Z_motor)[1] + washer_diameter(M3_washer) / 2 + 1) / 2;
 
 clamp_x = z_bar_offset() + clamp_length - bar_clamp_tab / 2;
 
@@ -33,7 +31,7 @@ function z_motor_bracket_height() = back_height;
 
 module z_motor_bracket(y_offset, rhs) {
     width = y_offset + length / 2;
-    cutout = y_offset - length / 2 - back_thickness;
+    cutout = y_offset - length / 2 - part_base_thickness;
 
     stl(rhs? "z_motor_bracket_rhs" : "z_motor_bracket_lhs");
         color(z_motor_bracket_color) {
@@ -51,10 +49,10 @@ module z_motor_bracket(y_offset, rhs) {
                     //
                     // Bracing webs
                     //
-                    for(x = [length / 2 - 2 * slot_inset - thickness / 2, -(length / 2 - 2 * slot_inset - thickness / 2)])
-                        translate([x, y_offset - back_thickness + eta, eta])
+                    for(x = [length / 2 - 2 * z_slot_inset - thickness / 2, -(length / 2 - 2 * z_slot_inset - thickness / 2)])
+                        translate([x, y_offset - back_thickness + eta, thickness - eta])
                             rotate([90, 0, -90])
-                                right_triangle(width = y_offset - big_hole, height = back_height, h = thickness);
+                                right_triangle(width = y_offset - back_thickness - big_hole, height = back_height - thickness, h = thickness);
                     //
                     // bar clamp
                     //
@@ -74,8 +72,8 @@ module z_motor_bracket(y_offset, rhs) {
                 //
                 // Cut out between webs
                 //
-                translate([0, length / 2 + cutout / 2, thickness / 2])
-                    rounded_rectangle([length - 4 * slot_inset - 2 * thickness, cutout, thickness + 1], r = corner_rad / 2, center = true);
+                translate([0, length / 2 + cutout / 2 - eta, 0])
+                    rounded_rectangle([length - 4 * z_slot_inset - 2 * thickness, cutout, back_height * 2 + 1], r = corner_rad / 2, center = true);
                 //
                 // motor holes
                 //
@@ -102,10 +100,13 @@ module z_motor_bracket(y_offset, rhs) {
                 // screw slots in the back
                 //
                 for(side = [-1, 1])
-                    translate([side * (length / 2 - slot_inset), width - length / 2 - back_thickness  / 2,  back_height / 2 + thickness / 2])
+                    translate([side * (length / 2 - z_slot_inset + z_nut_offset), width - length / 2 - back_thickness,  back_height / 2 + thickness / 2])
                         rotate([90, 0, 0])
-                            vertical_tearslot(h = back_thickness + 1, l = back_height - thickness - 2 * slot_inset,
-                                r = screw_clearance_radius(frame_screw), center = true);
+                            if(frame_nut_traps)
+                                nut_trap(screw_clearance_radius(frame_screw), nut_radius(frame_nut), back_thickness - part_base_thickness, true);
+                            else
+                                vertical_tearslot(h = back_thickness * 2 + 1, l = back_height - thickness - 2 * z_slot_inset,
+                                    r = screw_clearance_radius(frame_screw), center = true);
                 //
                 // rounded corners on the back
                 //
@@ -120,13 +121,19 @@ module z_motor_bracket(y_offset, rhs) {
         }
 }
 
-function z_motor_bracket_hole_offset() = length / 2 - slot_inset;
-
-module z_motor_bracket_holes(gantry_setback)
+module z_motor_bracket_hole_positions(gantry_setback)
     for(side = [-1, 1])
-        translate([side * z_motor_bracket_hole_offset(), gantry_setback - back_thickness,  back_height / 2 + thickness / 2])
+        translate([side * z_motor_bracket_hole_offset(), gantry_setback - part_base_thickness,  back_height / 2 + thickness / 2])
             rotate([90, 0, 0])
                 child();
+
+module z_motor_bracket_holes(gantry_setback)
+    z_motor_bracket_hole_positions(gantry_setback)
+        if(frame_nut_traps)
+            rotate([0, 0, 90])
+                slot(h = 100, l = back_height - thickness - 2 * z_slot_inset, r = screw_clearance_radius(frame_screw), center = true);
+        else
+            frame_screw_hole();
 
 
 module z_motor_assembly(gantry_setback, rhs, standalone = false) {
@@ -150,8 +157,8 @@ module z_motor_assembly(gantry_setback, rhs, standalone = false) {
     // Mounting screws
     //
     if(!standalone)
-        z_motor_bracket_holes(gantry_setback)
-            frame_screw(back_thickness);
+        z_motor_bracket_hole_positions(gantry_setback)
+            frame_screw(part_base_thickness);
     //
     // Motor and screws
     //

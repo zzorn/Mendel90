@@ -11,6 +11,7 @@ include <../utils/bom.scad>
 include <../utils/polyholes.scad>
 include <../utils/teardrops.scad>
 include <../utils/cables.scad>
+include <../utils/shields.scad>
 
 module slot(h, r, l, center = true)
     linear_extrude(height = h, convexity = 6, center = center)
@@ -21,17 +22,38 @@ module slot(h, r, l, center = true)
                 circle(r = r, center = true);
         }
 
-module nut_trap(screw_r, nut_r, depth, horizontal = false) {
+module nut_trap(screw_r, nut_r, depth, horizontal = false, supported = false) {
     union() {
         if(horizontal) {
-            teardrop_plus(r = screw_r, h = 200, center = true);
-            cylinder(r = nut_r   + layer_height / 4, h = depth * 2, center = true, $fn = 6);
+            if(screw_r)
+                teardrop_plus(r = screw_r, h = 200, center = true);
+            cylinder(r = nut_r + layer_height / 4, h = depth * 2, center = true, $fn = 6);
         }
         else {
-            poly_cylinder(r = screw_r, h = 200, center = true);
-            cylinder(r = nut_r, h = depth * 2, center = true, $fn = 6);
+            difference() {
+                union() {
+                    if(screw_r)
+                        poly_cylinder(r = screw_r, h = 200, center = true);
+                    cylinder(r = nut_r, h = depth * 2, center = true, $fn = 6);
+                }
+                if(supported)
+                    translate([0, 0, depth - eta])
+                        cylinder(r = nut_r, h = layer_height, center = false);
+            }
         }
     }
+}
+
+module part_screw_hole(screw, nut, horizontal = false, supported = false) {
+    screw_r = screw_clearance_radius(screw);
+    if(nut)
+        translate([0, 0, nut_trap_depth(nut)])
+            nut_trap(screw_r, nut_radius(nut), nut_trap_depth(nut), horizontal, supported);
+    else
+        if(horizontal)
+            teardrop_plus(r = screw_r, h = 200, center = true);
+        else
+            poly_cylinder(r = screw_r, h = 200, center = true);
 }
 
 module fillet(r, h) {
@@ -117,3 +139,30 @@ module explode(v, offset = [0,0,0]) {
     else
         child();
 }
+//
+// Same again as cant appear twice in the tree
+//
+module explode2(v, offset = [0,0,0]) {
+    if(exploded) {
+        translate(v)
+            child();
+        render() hull() {
+            sphere(0.2);
+            translate(v + offset)
+                sphere(0.2);
+        }
+    }
+    else
+        child();
+}
+//
+// Restore the view point
+//
+module view(t,r,d = 1000)
+    rotate([55, 0, 25])
+        translate([0, 0, -d + 500])
+            rotate([-r[0], 0, 0])
+                rotate([0, -r[1], 0])
+                    rotate([0, 0, -r[2]])
+                        translate(-t)
+                            child();
