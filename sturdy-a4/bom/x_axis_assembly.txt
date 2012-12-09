@@ -1,10 +1,12 @@
 x_axis_assembly:
 Vitamins:
-  1 Belt T5 x 6mm x 1048mm
-  1 Polypropylene strip 483mm x 16mm x 0.5mm
-  2 Smooth rod 10mm x 473mm
+  1 Belt T5 x 6mm x 1055mm (PU & Kevlar)
+  2 Smooth rod 10mm x 476mm
+  2 Wingnut M4
 
 Printed:
 
 Sub-assemblies:
+  1 extruder_assembly
   1 x_carriage_assembly
+  1 x_carriage_fan_assembly

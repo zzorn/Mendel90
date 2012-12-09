@@ -39,7 +39,7 @@ frame_corners = 25;
 frame_nuts = false;
 
 case_fan = fan80x38;
-psu = KY240W;
+psu = ATX500;
 
 controller = Sanguinololu;
 
